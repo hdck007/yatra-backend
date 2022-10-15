@@ -1,7 +1,9 @@
 const express = require('express');
-const { createTag } = require('../controllers/tags.controller');
+const { createTag, getTags } = require('../controllers/tags.controller');
 
 const router = express.Router();
+
+router.get('/', getTags);
 
 router.post('/create', createTag);
 

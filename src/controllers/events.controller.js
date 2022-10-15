@@ -62,6 +62,13 @@ const getFeed = async (req, res) => {
             },
           ],
         },
+        include: {
+          log: {
+            include: {
+              user: true,
+            },
+          },
+        },
         orderBy: {
           rating: 'desc',
         },
@@ -85,6 +92,13 @@ const getFeed = async (req, res) => {
             },
           ],
         },
+        include: {
+          log: {
+            include: {
+              user: true,
+            },
+          },
+        },
         orderBy: {
           rating: 'desc',
         },
@@ -92,7 +106,6 @@ const getFeed = async (req, res) => {
       res.status(201).json(events);
     }
   } catch (error) {
-    console.log(error);
     res.status(500).json({ error: error.message });
   }
 };

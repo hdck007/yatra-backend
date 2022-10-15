@@ -56,9 +56,9 @@ const handleLogin = async (req, res) => {
 const handleRegister = async (req, res) => {
   try {
     const {
-      username, password, firstName, lastName,
+      username, password,
     } = req.body;
-    if (!username || !password || !firstName || !lastName) {
+    if (!username || !password) {
       res.status(400).json({ message: 'missing required fields' });
       return;
     }
@@ -76,8 +76,6 @@ const handleRegister = async (req, res) => {
       data: {
         username,
         password: hashedPassword,
-        firstName,
-        lastName,
       },
     });
     const accessToken = jwt.sign(
