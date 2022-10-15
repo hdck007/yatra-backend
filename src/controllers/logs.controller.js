@@ -81,6 +81,8 @@ const getPlaces = async (req, res) => {
   }
 };
 
+// random
+
 module.exports = {
   createLog,
   endLog,
