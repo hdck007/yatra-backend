@@ -13,20 +13,13 @@ datasource db {
   referentialIntegrity = "prisma"
 }
 
-// globalfeed -> array of recent events 
-// (tags, destination, query, orderby ratings, filter by ratings)
-// start log --> logid ✅
-// end log --> logid ✅
-// event post api --> createdAt, updatedAt, logid, content --> (title, text, image)
-// User --> multiple logs
-// get logs start_date= and end_date=
-
 model User {
-  id        String @id @default(uuid())
+  id        String  @id @default(uuid())
   firstName String
   lastName  String
   password  String
-  username  String
+  username  String  @unique
+  refresh   String? @db.LongText
   logs      Log[]
 }
 

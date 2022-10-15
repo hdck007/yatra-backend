@@ -7,6 +7,8 @@ const morgan = require('morgan');
 const eventRoutes = require('./src/routes/events.routes');
 const logRoutes = require('./src/routes/logs.routes');
 const tagRouter = require('./src/routes/tags.routes');
+const authRouter = require('./src/routes/auth.routes');
+const verifyJWT = require('./src/middlewares/verifyJwt');
 
 app.use(cors());
 
@@ -14,9 +16,10 @@ app.use(morgan('tiny'));
 app.use(express.json());
 
 // route for logs
-app.use('/log', logRoutes);
-app.use('/event', eventRoutes);
-app.use('/tag', tagRouter);
+app.use('/user', authRouter);
+app.use('/log', verifyJWT, logRoutes);
+app.use('/event', verifyJWT, eventRoutes);
+app.use('/tag', verifyJWT, tagRouter);
 
 app.get('/', async (req, res) => {
   res.status(200).json({ msg: 'Hello' });
