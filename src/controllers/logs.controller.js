@@ -6,6 +6,27 @@ const prisma = new PrismaClient();
 const createLog = async (req, res) => {
   try {
     const { place, date } = req.body;
+    const prevLog = await prisma.log.findMany({
+      where: {
+        userId: req.user,
+      },
+      orderBy: {
+        startDate: 'desc',
+      },
+      take: 1,
+    });
+    if (prevLog.length > 0) {
+      if (prevLog[0].endDate === null) {
+        await prisma.log.update({
+          where: {
+            id: prevLog[0].id,
+          },
+          data: {
+            endDate: new Date(),
+          },
+        });
+      }
+    }
     const newLog = await prisma.log.create({
       data: {
         place: place.toLowerCase(),
@@ -46,6 +67,30 @@ const copyLog = async (req, res) => {
     const {
       id, date, days, perday,
     } = req.body;
+    console.log('this runs');
+    const prevLog = await prisma.log.findMany({
+      where: {
+        userId: req.user,
+      },
+      orderBy: {
+        startDate: 'desc',
+      },
+      take: 1,
+    });
+    console.log(prevLog);
+    if (prevLog.length > 0) {
+      if (prevLog[0].endDate === null) {
+        console.log('this runs');
+        await prisma.log.update({
+          where: {
+            id: prevLog[0].id,
+          },
+          data: {
+            endDate: new Date(),
+          },
+        });
+      }
+    }
     const log = await prisma.log.findUnique({
       where: {
         id,
