@@ -5,7 +5,29 @@ const prisma = new PrismaClient();
 // get or add websites data and return it
 const createEvent = async (req, res) => {
   try {
-    const { content, title, id } = req.body;
+    const {
+      content, title, id, tagId,
+    } = req.body;
+    if (tagId) {
+      const newEvent = await prisma.event.create({
+        data: {
+          content,
+          title,
+          log: {
+            connect: {
+              id,
+            },
+          },
+          tags: {
+            connect: {
+              id: tagId,
+            },
+          },
+        },
+      });
+      res.status(201).json(newEvent);
+      return;
+    }
     const newEvent = await prisma.event.create({
       data: {
         content,
@@ -18,6 +40,7 @@ const createEvent = async (req, res) => {
       },
     });
     res.status(201).json(newEvent);
+    return;
   } catch (error) {
     res.status(500).json({ error: error.message });
   }
@@ -34,6 +57,8 @@ const getFeed = async (req, res) => {
     destination = destination || '';
     tags = tags ? tags.split(',') : [];
     rating = rating || 0;
+
+    console.log(tags, destination, rating);
 
     if (tags.length) {
       const events = await prisma.event.findMany({
